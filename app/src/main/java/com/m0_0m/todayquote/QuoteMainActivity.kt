@@ -79,6 +79,7 @@ class QuoteMainActivity : AppCompatActivity() {
         }
 
         val quote_list_btn = findViewById<Button>(R.id.quote_list_btn)
+        val quote_edit_btn = findViewById<Button>(R.id.quote_edit_btn)
 
         //액티비티 클래스가 Context 클래스를 상속받기 때문에 Context 객체가 필요한 시점에 엑티비티 객체를 전달해도 무방함
         //목적지가 있는 명시적 인텐트 생성
@@ -87,6 +88,11 @@ class QuoteMainActivity : AppCompatActivity() {
             val intent = Intent(this, QuoteListActivity::class.java)
             intent.putExtra("data1", 100)
             intent.putExtra("data", "Hello")
+            startActivity(intent)
+        }
+
+        quote_edit_btn.setOnClickListener{
+            val intent = Intent(this, QuoteEditAcivity::class.java)
             startActivity(intent)
         }
 
