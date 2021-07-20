@@ -22,7 +22,7 @@ data class Quote(var idx: Int,
         }
 
         //저장된 명언을 반환하는 메소드
-        fun getQuotesFromPreference(pref: SharedPreferences) {
+        fun getQuotesFromPreference(pref: SharedPreferences) : MutableList<Quote>{
             val quotes = mutableListOf<Quote>()
 
             //0..20 -- 0  20
@@ -36,6 +36,7 @@ data class Quote(var idx: Int,
                     quotes.add(Quote(i, quoteText, quoteFrom))
                 }
             }
+            return quotes
         }
         //삭제 메서드
         fun removeQuoteFromPreference(pref: SharedPreferences, idx: Int) {

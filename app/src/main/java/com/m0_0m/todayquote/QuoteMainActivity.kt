@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import com.m0_0m.todayquote.Quote.Companion.getQuotesFromPreference
 import java.util.*
 
 class QuoteMainActivity : AppCompatActivity() {
@@ -17,6 +18,31 @@ class QuoteMainActivity : AppCompatActivity() {
     //보통 초기화는 onCreate 생명주기 메소드에서 이루어짐
     //MutableList => ArraList
     private lateinit var quotes: MutableList<Quote>
+    private lateinit var pref: SharedPreferences
+
+    fun initializeQuotes(){
+        //프리퍼런스 객체 가져오기
+        //"quote.xml" 파일에 명언 데이터 저장
+
+        //초기화 여부 확인
+        val initialized = pref.getBoolean("initialized", false)
+
+        if(!initialized){
+            //초기화 로직
+            Log.d("myapp", "초기화 작업 진행")
+            Quote.saveToPreference(pref, 0, "괴로운 시련처럼 보이는 것이 뜻밖의 좋은 일일 때가 많다.", "오스카 와일드")
+            Quote.saveToPreference(pref, 1, "성공한 사람이 되려고 노력하기보다 가치있는 사람이 되려고 노력하라.", "알버트 아인슈타인")
+            Quote.saveToPreference(pref, 2, "추구할 수 있는 용기가 있다면 우리의 모든 꿈은 이뤄질 수 있다.", "월트 디즈니")
+            Quote.saveToPreference(pref, 3, "실패에서부터 성공을 만들어 내라. 좌절과 실패는 성공으로 가는 가장 확실한 디딤돌이다.", "데일 카네기")
+            Quote.saveToPreference(pref, 4, "창조적인 삶을 살려면 내가 틀릴지도 모른다는 공포를 버려야 한다.")
+
+            //initialized 값 ture로 변환
+            val editor = pref.edit()
+            editor.putBoolean("initialized",true)
+            editor.apply()
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,20 +51,32 @@ class QuoteMainActivity : AppCompatActivity() {
         val quoteText = findViewById<TextView>(R.id.quote_text)
         val quoteFrom = findViewById<TextView>(R.id.quote_from)
 
-        //lateinit 관련 값들을 초기화
-        quotes = mutableListOf()
+        pref = getSharedPreferences("quotes", Context.MODE_PRIVATE)
 
-        quotes.add(Quote(1, "명언 1", "출처 1"))
+        initializeQuotes()
+
+        quotes = Quote.getQuotesFromPreference(pref)
+
+        //lateinit 관련 값들을 초기화
+
+        /*quotes.add(Quote(1, "명언 1", "출처 1"))
         quotes.add(Quote(2, "명언 2", "출처 2"))
         quotes.add(Quote(3, "명언 3", "출처 3"))
+        */
 
-        val random = Random()
-        val randomIndex = random.nextInt(quotes.size)
-        val randomQuote = quotes[randomIndex]
+        if(quotes.isNotEmpty()){
+            val random = Random()
+            val randomIndex = random.nextInt(quotes.size)
+            val randomQuote = quotes[randomIndex]
+            quoteText.text = randomQuote.text
+            quoteFrom.text = randomQuote.from
+        }
+        else{
+            quoteText.text = "저장된 명언이 없습니다."
+            quoteFrom.text = ""
+        }
 
-        quoteText.text = randomQuote.text
-        quoteFrom.text = randomQuote.from
-
+        /*
         //SharedPreferences 인터페이스 공부 p.544
         //앱의 설정 내용을 저장하기 위해서 사용하는 클래스
         //ex 음악 스트리밍앱 -> 설정 화면 -> 라이트 모드, 다크모드 설정, 볼륨 설정, 선호하는 장르 설정
@@ -75,5 +113,7 @@ class QuoteMainActivity : AppCompatActivity() {
         Log.d("myapp", sp.contains("non-exist").toString())
 
         editor.clear()
+
+         */
     }
 }
