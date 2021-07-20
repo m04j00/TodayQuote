@@ -1,10 +1,12 @@
 package com.m0_0m.todayquote
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import com.m0_0m.todayquote.Quote.Companion.getQuotesFromPreference
 import java.util.*
@@ -74,6 +76,18 @@ class QuoteMainActivity : AppCompatActivity() {
         else{
             quoteText.text = "저장된 명언이 없습니다."
             quoteFrom.text = ""
+        }
+
+        val quote_list_btn = findViewById<Button>(R.id.quote_list_btn)
+
+        //액티비티 클래스가 Context 클래스를 상속받기 때문에 Context 객체가 필요한 시점에 엑티비티 객체를 전달해도 무방함
+        //목적지가 있는 명시적 인텐트 생성
+
+        quote_list_btn.setOnClickListener{
+            val intent = Intent(this, QuoteListActivity::class.java)
+            intent.putExtra("data1", 100)
+            intent.putExtra("data", "Hello")
+            startActivity(intent)
         }
 
         /*
