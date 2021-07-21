@@ -14,14 +14,23 @@ class QuoteEditAcivity : AppCompatActivity() {
         val pref = getSharedPreferences("quotes", Context.MODE_PRIVATE)
         val quotes = Quote.getQuotesFromPreference(pref)
 
-        val layoutManager = LinearLayoutManager(this) //목록형
+        //20개 데이터 채우고 기존의 quotes 데이터랑 통합한 List 만들기
+        val editQuotes = mutableListOf<Quote>()
+        for(i in 0 until 20){
+            editQuotes.add(Quote(i, "", ""))
+        }
 
-        val adapter = QuoteAdapter(quotes)
+        //기존 내용 덮어쓰기
+        for(q in quotes){
+            editQuotes[q.idx].idx = q.idx
+            editQuotes[q.idx].text = q.text
+            editQuotes[q.idx].from = q.from
+        }
 
         val recyclerView = findViewById<RecyclerView>(R.id.quote_edit_list)
         //모든 요소의 크기가 똑같아서 true를 전달하면 내부적으로 추가적인 최적화를 진행함
         recyclerView.setHasFixedSize(false) //높이 차이 발생하므로 false
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = QuoteEditAdapter(editQuotes)
     }
 }
