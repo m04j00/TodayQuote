@@ -1,8 +1,11 @@
 package com.m0_0m.todayquote
 
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -15,7 +18,33 @@ class QuoteAdapter(val dataList : List<Quote>)
         lateinit var quote : Quote
         val quoteText = view.findViewById<TextView>(R.id.quote_text)
         val quoteFrom = view.findViewById<TextView>(R.id.quote_from)
+        val quoteShareBtn = view.findViewById<Button>(R.id.quote_share_btn)
+        val quoteFromSearchBtn = view.findViewById<Button>(R.id.quote_from_search_btn)
 
+        init{
+            quoteShareBtn.setOnClickListener{
+                //암시적 인텐트
+                val intent = Intent(Intent.ACTION_SEND)
+
+                //인텐트 내용 채우기 (공유할 내용)
+                intent.putExtra(Intent.EXTRA_TITLE, "힘이 되는 명언")
+                intent.putExtra(Intent.EXTRA_SUBJECT, "힘이 되는 명언")
+                intent.putExtra(Intent.EXTRA_TEXT, quote.text)
+                intent.type = "text/plain"
+
+                //어떤 앱으로 공유할지를 매번 띄울 수 있도록 chooser 만들기
+                val chooser = Intent.createChooser(intent, "명언 공유")
+                //startActivity 이용해서 공유할 앱 선택하는 액티비티 띄워주기
+                it.context.startActivity(chooser)
+            }
+
+            quoteFromSearchBtn.setOnClickListener{
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q=${quote.from}"))
+                //val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:010-1234-1234"))
+
+                it.context.startActivity(intent)
+            }
+        }
         fun bind(q: Quote){
            this.quote = q
            quoteText.text = quote.text

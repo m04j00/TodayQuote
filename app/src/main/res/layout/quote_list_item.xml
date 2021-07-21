@@ -13,4 +13,16 @@
         android:id="@+id/quote_from"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/quote_share_btn"
+        android:text="명언 공유"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/quote_from_search_btn"
+        android:text="출처 검색"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
